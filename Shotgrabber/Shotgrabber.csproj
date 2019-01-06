@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,6 +9,13 @@
     <RootNamespace>Shotgrabber</RootNamespace>
     <AssemblyName>Shotgrabber</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -27,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -59,14 +67,17 @@
     <Reference Include="System.Web.Mvc">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="VideoOS.Mobile.SDK">
-      <HintPath>..\..\..\Downloads\t\DotNet\Lib\DotNET\VideoOS.Mobile.SDK.dll</HintPath>
-    </Reference>
     <Reference Include="VideoOS.Mobile.Portable">
-      <HintPath>..\..\..\Downloads\t\DotNet\Lib\DotNET\VideoOS.Mobile.Portable.dll</HintPath>
+      <HintPath>..\Lib\DotNET\VideoOS.Mobile.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="VideoOS.Mobile.SDK">
+      <HintPath>..\Lib\DotNET\VideoOS.Mobile.SDK.dll</HintPath>
     </Reference>
     <Reference Include="VideoOS.Mobile.SDK.Portable">
-      <HintPath>..\..\..\Downloads\t\DotNet\Lib\DotNET\VideoOS.Mobile.SDK.Portable.dll</HintPath>
+      <HintPath>..\Lib\DotNET\VideoOS.Mobile.SDK.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="VideoOS.Mobile.Windows">
+      <HintPath>..\Lib\DotNET\VideoOS.Mobile.Windows.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -98,5 +109,21 @@
         <XspParameters Port="8080" Address="127.0.0.1" SslMode="None" SslProtocol="Default" KeyType="None" CertFile="" KeyFile="" PasswordOptions="None" Password="" Verbose="True" />
       </Properties>
     </MonoDevelop>
+    <VisualStudio>
+      <FlavorProperties GUID="{349C5851-65DF-11DA-9384-00065B846F21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:65167/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
   </ProjectExtensions>
 </Project>

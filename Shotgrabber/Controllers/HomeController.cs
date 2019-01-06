@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Threading;
 using System.Web.Mvc;
 using VideoOS.Mobile.Portable.MetaChannel;
@@ -13,7 +14,7 @@ namespace Shotgrabber.Controllers
     {
         public ActionResult Index()
         {
-            Uri uri = new Uri("http://50.79.232.137:8081");
+            Uri uri = new Uri(ConfigurationManager.AppSettings["milestoneUrl"]);
             // Initialize the Mobile SDK
             VideoOS.Mobile.SDK.Environment.Instance.Initialize();
             var channelType = 0 == string.Compare(uri.Scheme, "http", StringComparison.InvariantCultureIgnoreCase)
@@ -29,9 +30,10 @@ namespace Shotgrabber.Controllers
                 throw new Exception("Not connected to surveillance server");
 
 
-            var loginResponse = Connection.LogIn("vic.uzumeri@outlook.com", "JVstacks303!", ClientTypes.MobileClient, TimeSpan.FromSeconds(15));
+            var loginResponse = Connection.LogIn(ConfigurationManager.AppSettings["username"], ConfigurationManager.AppSettings["password"], ClientTypes.MobileClient, TimeSpan.FromSeconds(15));
+
             if (loginResponse.ErrorCode != ErrorCodes.Ok)
-                throw new Exception("Not loged in to the surveillance server");
+                throw new Exception("Not logged in to the surveillance server");
 
             var cameras = Connection.Views.GetAllViewsAndCameras(TimeSpan.FromSeconds(30));
 
@@ -42,11 +44,11 @@ namespace Shotgrabber.Controllers
                 DestHeight = 480,
                 CompressionLvl = 100
             };
-            var thumbnail = Connection.Thumbnail.GetThumbnail(videoParams, TimeSpan.FromSeconds(30));
+            var thumbnail = Connection.Thumbnail.GetThumbnailByTime(videoParams, new PlaybackParams(), TimeSpan.FromSeconds(30));
 
             ViewBag.Title = "Shot";
 
-            ViewData["Thumbnail"] = thumbnail.Thumbnail;
+            ViewData["Thumbnail"] = Convert.ToBase64String(thumbnail.Thumbnail);
 
             return View();
         }
