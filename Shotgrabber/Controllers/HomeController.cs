@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Configuration;
-using System.Threading;
 using System.Web.Mvc;
 using VideoOS.Mobile.Portable.MetaChannel;
 using VideoOS.Mobile.Portable.Utilities;
 using VideoOS.Mobile.Portable.VideoChannel.Params;
-using VideoOS.Mobile.SDK.Portable.Server.Base.CommandResults;
 using VideoOS.Mobile.SDK.Portable.Server.Base.Connection;
 
 namespace Shotgrabber.Controllers
@@ -15,6 +13,10 @@ namespace Shotgrabber.Controllers
         public ActionResult Index()
         {
             Uri uri = new Uri(ConfigurationManager.AppSettings["milestoneUrl"]);
+
+            if (String.IsNullOrWhiteSpace(Request.QueryString["cameraId"]))
+                throw new Exception("Camera ID was not sent in");
+
             // Initialize the Mobile SDK
             VideoOS.Mobile.SDK.Environment.Instance.Initialize();
             var channelType = 0 == string.Compare(uri.Scheme, "http", StringComparison.InvariantCultureIgnoreCase)
@@ -29,7 +31,6 @@ namespace Shotgrabber.Controllers
             if (connectResponse.ErrorCode != ErrorCodes.Ok)
                 throw new Exception("Not connected to surveillance server");
 
-
             var loginResponse = Connection.LogIn(ConfigurationManager.AppSettings["username"], ConfigurationManager.AppSettings["password"], ClientTypes.MobileClient, TimeSpan.FromSeconds(15));
 
             if (loginResponse.ErrorCode != ErrorCodes.Ok)
@@ -39,12 +40,17 @@ namespace Shotgrabber.Controllers
 
             var videoParams = new VideoParams()
             {
-                CameraId = new Guid("{eea4f88b-dee6-42ad-ae03-ba9d358ab7ac}"),
-                DestWidth = 640,
-                DestHeight = 480,
-                CompressionLvl = 100
+                // eea4f88b-dee6-42ad-ae03-ba9d358ab7ac
+                CameraId = new Guid(Request.QueryString["cameraId"]),
+                DestWidth = 1600,
+                DestHeight = 1200,
+                CompressionLvl = 0
             };
-            var thumbnail = Connection.Thumbnail.GetThumbnailByTime(videoParams, new PlaybackParams(), TimeSpan.FromSeconds(30));
+            var playbackParams = new PlaybackParams()
+            {
+                Time = !String.IsNullOrWhiteSpace(Request.QueryString["dateTime"]) ? DateTime.Parse(Request.QueryString["dateTime"]) : DateTime.Now
+            };
+            var thumbnail = Connection.Thumbnail.GetThumbnailByTime(videoParams, playbackParams, TimeSpan.FromSeconds(30));
 
             ViewBag.Title = "Shot";
 
