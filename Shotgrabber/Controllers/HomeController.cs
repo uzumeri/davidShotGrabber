@@ -42,8 +42,8 @@ namespace Shotgrabber.Controllers
             {
                 // eea4f88b-dee6-42ad-ae03-ba9d358ab7ac
                 CameraId = new Guid(Request.QueryString["cameraId"]),
-                DestWidth = 1600,
-                DestHeight = 1200,
+                DestWidth = int.Parse(ConfigurationManager.AppSettings["width"]),
+                DestHeight = int.Parse(ConfigurationManager.AppSettings["height"]),
                 CompressionLvl = 0
             };
             var playbackParams = new PlaybackParams()
